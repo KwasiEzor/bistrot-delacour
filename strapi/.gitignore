@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+dist/
+.cache/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Database
+data/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads (local provider)
+public/uploads/

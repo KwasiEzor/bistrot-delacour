@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reservations",
+  "info": {
+    "singularName": "reservation",
+    "pluralName": "reservations",
+    "displayName": "Reservation",
+    "description": "Customer table reservations"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "time": {
+      "type": "string",
+      "required": true
+    },
+    "guests": {
+      "type": "integer",
+      "required": true,
+      "min": 1,
+      "max": 20
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "specialRequests": {
+      "type": "text"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["pending", "confirmed", "cancelled", "completed"],
+      "default": "pending",
+      "required": true
+    },
+    "notes": {
+      "type": "richtext",
+      "description": "Admin notes"
+    }
+  }
+}

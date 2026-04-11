@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "gallery_images",
+  "info": {
+    "singularName": "gallery-image",
+    "pluralName": "gallery-images",
+    "displayName": "Gallery Image",
+    "description": "Images for the photo gallery"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "caption": { "type": "text" },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images", "webp", "avif"]
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["interior", "exterior", "food", "events", "team"]
+    },
+    "isFeatured": { "type": "boolean", "default": false },
+    "order": { "type": "integer", "default": 0 }
+  }
+}

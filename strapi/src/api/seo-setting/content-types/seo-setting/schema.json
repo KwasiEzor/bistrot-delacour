@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "seo_settings",
+  "info": {
+    "singularName": "seo-setting",
+    "pluralName": "seo-settings",
+    "displayName": "SEO Settings",
+    "description": "Global SEO configuration and per-page meta overrides"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "defaultTitle": { "type": "string", "default": "Bistrot De La Cour - Restaurant Charleroi" },
+    "defaultDescription": {
+      "type": "text",
+      "default": "Découvrez une cuisine simple et excellente dans une ambiance chaleureuse au cœur de Charleroi. Bistrot De La Cour, une expérience culinaire authentique depuis 2018."
+    },
+    "defaultImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "siteUrl": { "type": "string", "default": "https://bistrot-delacour.be" },
+    "siteLanguage": { "type": "string", "default": "fr" },
+    "twitterHandle": { "type": "string" },
+    "googleSiteVerification": { "type": "string" },
+    "schemaOrgData": { "type": "json" },
+    "pages": { "type": "component", "repeatable": true, "component": "seo.page-meta" }
+  }
+}
