@@ -41,9 +41,9 @@ const Reviews = () => {
     )
   }
 
-  const averageRating = reviews.reduce((acc, r) => acc + r.attributes.rating, 0) / reviews.length
+  const averageRating = reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
   const ratingDistribution = [1, 2, 3, 4, 5].map(
-    (rating) => reviews.filter((r) => r.attributes.rating === rating).length
+    (rating) => reviews.filter((r) => r.rating === rating).length
   )
 
   return (
@@ -149,14 +149,14 @@ const Reviews = () => {
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 rounded-full bg-amber-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                     <span className="text-white font-bold">
-                      {review.attributes.author.charAt(0)}
+                      {review.author.charAt(0)}
                     </span>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-stone-900">{review.attributes.author}</h3>
+                      <h3 className="font-semibold text-stone-900">{review.author}</h3>
                       <span className="text-sm text-stone-500">
-                        {new Date(review.attributes.date || review.attributes.createdAt).toLocaleDateString('fr-FR', {
+                        {new Date(review.date || review.createdAt).toLocaleDateString('fr-FR', {
                           day: 'numeric',
                           month: 'short',
                           year: 'numeric',
@@ -168,14 +168,14 @@ const Reviews = () => {
                         <Star
                           key={star}
                           className={`${
-                            star <= review.attributes.rating
+                            star <= review.rating
                               ? 'text-amber-500 fill-current'
                               : 'text-stone-300'
                           }`}
                           size={16}
                         />
                       ))}
-                      {review.attributes.isVerified && (
+                      {review.isVerified && (
                         <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
                           Vérifié
                         </span>
@@ -184,7 +184,7 @@ const Reviews = () => {
                     <div className="relative">
                       <Quote className="absolute -top-2 -left-2 text-amber-200" size={24} />
                       <p className="text-stone-700 italic leading-relaxed pl-6">
-                        "{review.attributes.content}"
+                        "{review.content}"
                       </p>
                     </div>
                   </div>

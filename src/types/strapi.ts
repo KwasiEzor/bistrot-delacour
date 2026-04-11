@@ -72,6 +72,7 @@ export interface MenuItem {
   allergens: string[] | null;
   isAvailable: boolean;
   isSpecial: boolean;
+  image: StrapiImage | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string | null;

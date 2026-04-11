@@ -37,7 +37,7 @@ const Gallery = () => {
 
   const filteredImages = activeCategory === 'Tous'
     ? images
-    : images.filter((img) => categoryMap[img.attributes.category || ''] === activeCategory)
+    : images.filter((img) => categoryMap[img.category || ''] === activeCategory)
 
   const nextImage = () => {
     if (selectedImage === null) return
@@ -113,7 +113,7 @@ const Gallery = () => {
           <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence>
               {filteredImages.map((image, index) => {
-                const imageUrl = getStrapiImageUrl(image.attributes.image, 'medium')
+                const imageUrl = getStrapiImageUrl(image.image, 'medium')
                 if (!imageUrl) return null
                 return (
                   <motion.div
@@ -129,7 +129,7 @@ const Gallery = () => {
                     <div className="aspect-[4/3] overflow-hidden">
                       <img
                         src={imageUrl}
-                        alt={image.attributes.title}
+                        alt={image.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         loading="lazy"
                       />
@@ -143,7 +143,7 @@ const Gallery = () => {
                     </div>
                     <div className="absolute top-4 left-4">
                       <span className="bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        {categoryMap[image.attributes.category || ''] || 'Général'}
+                        {categoryMap[image.category || ''] || 'Général'}
                       </span>
                     </div>
                   </motion.div>
@@ -201,16 +201,16 @@ const Gallery = () => {
               </button>
 
               <img
-                src={getStrapiImageUrl(filteredImages[selectedImage].attributes.image, 'large') || ''}
-                alt={filteredImages[selectedImage].attributes.title}
+                src={getStrapiImageUrl(filteredImages[selectedImage].image, 'large') || ''}
+                alt={filteredImages[selectedImage].title}
                 className="max-w-full max-h-[80vh] object-contain rounded-lg"
               />
 
               <div className="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-sm text-white p-4 rounded-lg">
                 <p className="text-sm opacity-75 mb-1">
-                  {categoryMap[filteredImages[selectedImage].attributes.category || ''] || 'Général'}
+                  {categoryMap[filteredImages[selectedImage].category || ''] || 'Général'}
                 </p>
-                <p className="font-medium">{filteredImages[selectedImage].attributes.title}</p>
+                <p className="font-medium">{filteredImages[selectedImage].title}</p>
                 <p className="text-sm opacity-75 mt-2">
                   {selectedImage + 1} / {filteredImages.length}
                 </p>

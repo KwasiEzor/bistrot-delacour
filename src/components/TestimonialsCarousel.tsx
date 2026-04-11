@@ -13,7 +13,7 @@ const TestimonialsCarousel = () => {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const res = await getTestimonials(true) // featured only
+        const res = await getTestimonials(true)
         setTestimonials(res.data)
       } catch (err) {
         console.error('Failed to load testimonials:', err)
@@ -38,17 +38,11 @@ const TestimonialsCarousel = () => {
     )
   }
 
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index)
-  }
+  const goToSlide = (index: number) => setCurrentIndex(index)
 
   useEffect(() => {
     if (!isAutoPlaying || testimonials.length === 0) return
-
-    const interval = setInterval(() => {
-      nextSlide()
-    }, 5000)
-
+    const interval = setInterval(nextSlide, 5000)
     return () => clearInterval(interval)
   }, [currentIndex, isAutoPlaying, testimonials.length])
 
@@ -101,7 +95,7 @@ const TestimonialsCarousel = () => {
                   <Star
                     key={star}
                     className={`${
-                      star <= current.attributes.rating
+                      star <= current.rating
                         ? 'text-amber-500 fill-current'
                         : 'text-stone-300'
                     } transition-colors duration-300`}
@@ -116,7 +110,7 @@ const TestimonialsCarousel = () => {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="text-xl md:text-2xl text-stone-700 font-medium leading-relaxed mb-8 italic"
               >
-                "{current.attributes.quote}"
+                "{current.quote}"
               </motion.blockquote>
 
               <motion.div
@@ -127,15 +121,15 @@ const TestimonialsCarousel = () => {
               >
                 <div className="w-12 h-12 rounded-full bg-amber-600 flex items-center justify-center shadow-lg">
                   <span className="text-white font-bold text-lg">
-                    {current.attributes.author.charAt(0)}
+                    {current.author.charAt(0)}
                   </span>
                 </div>
                 <div className="text-left">
                   <p className="font-semibold text-stone-900 text-lg">
-                    {current.attributes.author}
+                    {current.author}
                   </p>
                   <p className="text-stone-500 text-sm">
-                    {current.attributes.date || new Date(current.attributes.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {current.date || new Date(current.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>
               </motion.div>
