@@ -1,65 +1,37 @@
 import { strapiFetch } from './client';
 import type {
-  MenuCategory,
-  MenuItem,
-  Reservation,
-  ContactMessage,
-  GalleryImage,
-  Review,
-  TeamMember,
-  FAQ,
-  Testimonial,
-  SiteSettings,
-  SEOSettings,
-  StrapiResponse,
-  StrapiCollection,
+  MenuCategory, MenuItem, Reservation, ContactMessage,
+  GalleryImage, Review, TeamMember, FAQ, Testimonial,
+  SiteSettings, SEOSettings, StrapiResponse, StrapiCollection,
 } from '../types/strapi';
 
 // ─── Menu Categories ─────────────────────────────────────
 export async function getMenuCategories() {
   return strapiFetch<StrapiCollection<MenuCategory>>('/menu-categories', {
-    params: { 'populate': 'menuItems.image', 'sort': 'order:asc', 'pagination[pageSize]': '100' },
-  });
-}
-
-export async function getMenuCategoryBySlug(slug: string) {
-  return strapiFetch<StrapiResponse<MenuCategory>>('/menu-categories', {
-    params: { 'filters[slug][$eq]': slug, 'populate': 'menuItems.image' },
+    params: { 'sort': 'order:asc', 'pagination[pageSize]': '100' },
   });
 }
 
 // ─── Menu Items ──────────────────────────────────────────
 export async function getMenuItems(category?: string) {
-  const params: Record<string, string | number> = {
-    'populate': 'image,category',
+  const params: Record<string, string> = {
     'sort': 'createdAt:desc',
     'pagination[pageSize]': '100',
   };
-  if (category) {
-    params['filters[category][slug][$eq]'] = category;
-  }
+  if (category) params['filters[category][slug][$eq]'] = category;
   return strapiFetch<StrapiCollection<MenuItem>>('/menu-items', { params });
 }
 
 export async function getSpecialMenuItems() {
   return strapiFetch<StrapiCollection<MenuItem>>('/menu-items', {
-    params: {
-      'filters[isSpecial][$eq]': 'true',
-      'populate': 'image,category',
-      'pagination[pageSize]': '10',
-    },
+    params: { 'filters[isSpecial][$eq]': 'true', 'pagination[pageSize]': '10' },
   });
 }
 
 // ─── Reservations ────────────────────────────────────────
 export async function createReservation(data: {
-  date: string;
-  time: string;
-  guests: number;
-  name: string;
-  email: string;
-  phone: string;
-  specialRequests?: string;
+  date: string; time: string; guests: number;
+  name: string; email: string; phone: string; specialRequests?: string;
 }) {
   return strapiFetch<StrapiResponse<Reservation>>('/reservations', {
     method: 'POST',
@@ -69,10 +41,7 @@ export async function createReservation(data: {
 
 // ─── Contact Messages ────────────────────────────────────
 export async function createContactMessage(data: {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
+  name: string; email: string; subject: string; message: string;
 }) {
   return strapiFetch<StrapiResponse<ContactMessage>>('/contact-messages', {
     method: 'POST',
@@ -83,74 +52,47 @@ export async function createContactMessage(data: {
 // ─── Gallery ─────────────────────────────────────────────
 export async function getGalleryImages(category?: string, featuredOnly = false) {
   const params: Record<string, string> = {
-    'populate': 'image',
-    'sort': 'order:asc',
-    'pagination[pageSize]': '100',
+    'sort': 'order:asc', 'pagination[pageSize]': '100',
   };
-  if (category) {
-    params['filters[category][$eq]'] = category;
-  }
-  if (featuredOnly) {
-    params['filters[isFeatured][$eq]'] = 'true';
-  }
+  if (category) params['filters[category][$eq]'] = category;
+  if (featuredOnly) params['filters[isFeatured][$eq]'] = 'true';
   return strapiFetch<StrapiCollection<GalleryImage>>('/gallery-images', { params });
 }
 
 // ─── Reviews ─────────────────────────────────────────────
 export async function getReviews(limit = 20) {
   return strapiFetch<StrapiCollection<Review>>('/reviews', {
-    params: {
-      'sort': 'date:desc',
-      'pagination[pageSize]': String(limit),
-    },
+    params: { 'sort': 'date:desc', 'pagination[pageSize]': String(limit) },
   });
 }
 
 // ─── Team Members ────────────────────────────────────────
 export async function getTeamMembers() {
   return strapiFetch<StrapiCollection<TeamMember>>('/team-members', {
-    params: {
-      'populate': 'photo',
-      'sort': 'order:asc',
-      'pagination[pageSize]': '20',
-    },
+    params: { 'sort': 'order:asc', 'pagination[pageSize]': '20' },
   });
 }
 
 // ─── FAQ ─────────────────────────────────────────────────
 export async function getFAQs(category?: string) {
-  const params: Record<string, string> = {
-    'sort': 'order:asc',
-    'pagination[pageSize]': '100',
-  };
-  if (category) {
-    params['filters[category][$eq]'] = category;
-  }
+  const params: Record<string, string> = { 'sort': 'order:asc', 'pagination[pageSize]': '100' };
+  if (category) params['filters[category][$eq]'] = category;
   return strapiFetch<StrapiCollection<FAQ>>('/faqs', { params });
 }
 
 // ─── Testimonials ────────────────────────────────────────
 export async function getTestimonials(featuredOnly = false) {
-  const params: Record<string, string> = {
-    'sort': 'order:asc',
-    'pagination[pageSize]': '50',
-  };
-  if (featuredOnly) {
-    params['filters[isFeatured][$eq]'] = 'true';
-  }
+  const params: Record<string, string> = { 'sort': 'order:asc', 'pagination[pageSize]': '50' };
+  if (featuredOnly) params['filters[isFeatured][$eq]'] = 'true';
   return strapiFetch<StrapiCollection<Testimonial>>('/testimonials', { params });
 }
 
 // ─── Site Settings ───────────────────────────────────────
 export async function getSiteSettings() {
-  return strapiFetch<StrapiResponse<SiteSettings>>('/site-setting', {
-    params: { 'populate': 'heroImage' },
-  });
+  return strapiFetch<StrapiResponse<SiteSettings>>('/site-setting');
 }
 
 // ─── SEO Settings ────────────────────────────────────────
 export async function getSEOSettings() {
-  return strapiFetch<StrapiResponse<SEOSettings>>('/seo-setting', {
-    params: { 'populate': 'defaultImage,pages.image' },
-  });
+  return strapiFetch<StrapiResponse<SEOSettings>>('/seo-setting');
 }
