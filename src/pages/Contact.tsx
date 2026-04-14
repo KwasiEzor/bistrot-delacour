@@ -3,12 +3,35 @@ import { motion } from 'framer-motion'
 import { MapPin, Phone, Clock, Mail, Send } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
+import L from 'leaflet'
+
 import { contactSchema, type ContactFormData } from '../lib/schemas'
 import { createContactMessage } from '../api/services'
+
+// Fix for default marker icon in Leaflet + Vite/React
+import markerIcon from 'leaflet/dist/images/marker-icon.png'
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
+import markerShadow from 'leaflet/dist/images/marker-shadow.png'
+
+const DefaultIcon = L.icon({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+})
+
+L.Marker.prototype.options.icon = DefaultIcon
 
 const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const position: [number, number] = [50.41091, 4.44222]
 
   const {
     register,
@@ -153,18 +176,6 @@ const Contact = () => {
                     >
                       contact@bistrot-delacour.be
                     </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Map placeholder */}
-              <div className="mt-12">
-                <h3 className="font-semibold text-stone-900 mb-4">Nous trouver</h3>
-                <div className="aspect-video bg-stone-200 rounded-lg flex items-center justify-center">
-                  <div className="text-center text-stone-500">
-                    <MapPin size={48} className="mx-auto mb-4" />
-                    <p>Carte interactive Google Maps</p>
-                    <p className="text-sm">Rue de Dampremy 22, 6000 Charleroi</p>
                   </div>
                 </div>
               </div>
@@ -329,6 +340,33 @@ const Contact = () => {
                 </motion.div>
               )}
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Map Section */}
+      <section className="pb-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="h-[500px] w-full relative z-0 rounded-2xl overflow-hidden shadow-lg border border-stone-200">
+            <MapContainer
+              center={position}
+              zoom={16}
+              scrollWheelZoom={false}
+              className="h-full w-full"
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={position}>
+                <Popup>
+                  <div className="text-center">
+                    <h4 className="font-bold text-stone-900">Bistrot De La Cour</h4>
+                    <p className="text-sm text-stone-600">Rue de Dampremy 22, 6000 Charleroi</p>
+                  </div>
+                </Popup>
+              </Marker>
+            </MapContainer>
           </div>
         </div>
       </section>
