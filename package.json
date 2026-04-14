@@ -5,8 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:all": "concurrently -n \"STRAPI,FRONTEND\" -c \"yellow,blue\" \"cd strapi && npx strapi develop\" \"vite\"",
-    "dev:strapi": "cd strapi && npm run develop",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

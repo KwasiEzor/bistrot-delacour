@@ -3,7 +3,7 @@
 This document outlines the strategic transition of the Bistrot De La Cour project from a functional MVP to a production-grade, offline-capable PWA.
 
 ## 1. Architecture & Backend
-*   **CMS:** Migrate from Strapi v5 to **Payload CMS**.
+*   **CMS:** Transition to **Payload CMS**.
     *   *Rationale:* TypeScript-native, code-first schema, lighter resource footprint, and superior developer experience.
 *   **Database:** **PostgreSQL** (via Neon.tech or Supabase for production).
 *   **Storage:** **Cloudinary** for image optimization and CDN delivery.
@@ -37,9 +37,10 @@ This document outlines the strategic transition of the Bistrot De La Cour projec
 *   [X] Refactor TestimonialsCarousel as a proof-of-concept.
 
 ### Milestone 4: Payload CMS Migration (In Progress)
+*   [X] Purge Strapi backend and related configurations.
 *   [ ] Define TypeScript schemas for Menu, Gallery, and Reviews (Started: MenuItems defined).
 *   [ ] Set up Payload CMS instance.
-*   [ ] Migrate data fetching logic from Strapi services.
+*   [ ] Implement new data fetching logic for Payload.
 
 ## 5. Development Standards
 *   **TDD:** All new features must be accompanied by unit or integration tests.
