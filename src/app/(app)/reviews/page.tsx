@@ -1,8 +1,11 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
-import { getReviews } from '../api/services'
-import type { Review } from '../types/strapi'
+import { getReviews } from '@/api/services'
+import type { Review } from '@/types/strapi'
+import Link from 'next/link'
 
 const Reviews = () => {
   const [reviews, setReviews] = useState<Review[]>([])
@@ -48,6 +51,7 @@ const Reviews = () => {
 
   return (
     <div className="pt-16">
+      {/* Hero Section */}
       <section className="relative py-32 bg-gradient-to-br from-amber-50 to-stone-100 overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -209,12 +213,12 @@ const Reviews = () => {
             <p className="text-xl text-amber-100 mb-8 leading-relaxed">
               Votre avis nous aide à nous améliorer et guide les autres gourmands.
             </p>
-            <a
+            <Link
               href="/reservation"
               className="inline-block bg-white text-amber-600 px-8 py-3 rounded-full font-semibold hover:bg-stone-100 transition-colors duration-300"
             >
               Réserver une table
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>

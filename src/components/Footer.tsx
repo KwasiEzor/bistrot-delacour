@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Phone, MapPin, Instagram, Facebook } from 'lucide-react'
 
 const Footer = () => {
@@ -77,16 +77,16 @@ const Footer = () => {
               © 2024 Bistrot De La Cour. Tous droits réservés.
             </p>
             <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 mt-4 md:mt-0">
-              <Link to="/about" className="text-stone-500 hover:text-amber-500 text-sm transition-colors duration-300">
+              <Link href="/about" className="text-stone-500 hover:text-amber-500 text-sm transition-colors duration-300">
                 À propos
               </Link>
-              <Link to="/contact" className="text-stone-500 hover:text-amber-500 text-sm transition-colors duration-300">
+              <Link href="/contact" className="text-stone-500 hover:text-amber-500 text-sm transition-colors duration-300">
                 Contact
               </Link>
-              <Link to="/reservation" className="text-stone-500 hover:text-amber-500 text-sm transition-colors duration-300">
+              <Link href="/reservation" className="text-stone-500 hover:text-amber-500 text-sm transition-colors duration-300">
                 Réservation
               </Link>
-              <Link to="/privacy" className="text-stone-500 hover:text-amber-500 text-sm transition-colors duration-300">
+              <Link href="/privacy" className="text-stone-500 hover:text-amber-500 text-sm transition-colors duration-300">
                 Confidentialité
               </Link>
             </div>

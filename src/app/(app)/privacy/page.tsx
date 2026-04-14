@@ -1,5 +1,7 @@
+'use client'
+
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 
 const PrivacyPolicy = () => {
   return (
@@ -150,7 +152,7 @@ const PrivacyPolicy = () => {
 
           <div className="mt-16 pt-8 border-t border-stone-200 text-center">
             <Link
-              to="/"
+              href="/"
               className="text-amber-600 hover:text-amber-700 font-medium"
             >
               ← Retour à l'accueil

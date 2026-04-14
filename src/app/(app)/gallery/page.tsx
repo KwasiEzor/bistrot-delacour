@@ -1,9 +1,11 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
-import { getGalleryImages } from '../api/services'
-import { getStrapiImageUrl } from '../api/client'
-import type { GalleryImage } from '../types/strapi'
+import { getGalleryImages } from '@/api/services'
+import { getStrapiImageUrl } from '@/api/client'
+import type { GalleryImage } from '@/types/strapi'
 
 const categoryMap: Record<string, string> = {
   interior: 'Ambiance',
@@ -234,12 +236,12 @@ const Gallery = () => {
             <p className="text-xl text-stone-600 mb-8">
               Réservez votre table et venez découvrir l'ambiance unique du Bistrot De La Cour.
             </p>
-            <a
+            <Link
               href="/reservation"
               className="inline-block bg-amber-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-amber-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
               Réserver maintenant
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>

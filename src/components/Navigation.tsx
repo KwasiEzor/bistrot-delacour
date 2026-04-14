@@ -1,123 +1,173 @@
-import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+'use client'
+
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Phone } from 'lucide-react'
+import { Menu, X, UtensilsCrossed, Phone, Clock, MapPin } from 'lucide-react'
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const location = useLocation()
+  const [isScrolled, setIsScrolled] = useState(false)
+  const pathname = usePathname()
 
-  const navItems = [
-    { name: 'Accueil', path: '/' },
-    { name: 'À propos', path: '/about' },
-    { name: 'Menu', path: '/menu' },
-    { name: 'Réservation', path: '/reservation' },
-    { name: 'Galerie', path: '/gallery' },
-    { name: 'Avis', path: '/reviews' },
-    { name: 'Contact', path: '/contact' },
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false)
+  }, [pathname])
+
+  const navLinks = [
+    { name: 'Accueil', href: '/' },
+    { name: 'Menu', href: '/menu' },
+    { name: 'Réservation', href: '/reservation' },
+    { name: 'Galerie', href: '/gallery' },
+    { name: 'Avis', href: '/reviews' },
+    { name: 'À Propos', href: '/about' },
+    { name: 'Contact', href: '/contact' },
   ]
 
-  const isActive = (path: string) => location.pathname === path
+  const isActive = (path: string) => pathname === path
 
   return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-stone-200">
+    <nav
+      className={`fixed w-full z-50 transition-all duration-500 ${
+        isScrolled || isOpen
+          ? 'bg-white shadow-xl py-2'
+          : 'bg-transparent py-4'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-sm">B</span>
+          <Link href="/" className="flex items-center space-x-2 group">
+            <div className={`p-2 rounded-lg transition-colors duration-300 ${
+              isScrolled || isOpen ? 'bg-amber-600 text-white' : 'bg-white/20 text-white backdrop-blur-md'
+            }`}>
+              <UtensilsCrossed size={24} className="group-hover:rotate-12 transition-transform" />
             </div>
-            <span className="font-serif text-xl font-bold text-stone-900">
-              Bistrot De La Cour
-            </span>
+            <div className="flex flex-col">
+              <span className={`text-xl font-serif font-bold tracking-tight transition-colors duration-300 ${
+                isScrolled || isOpen ? 'text-stone-900' : 'text-white'
+              }`}>
+                Bistrot <span className="text-amber-500">De La Cour</span>
+              </span>
+              <span className={`text-[10px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+                isScrolled || isOpen ? 'text-stone-500' : 'text-white/70'
+              }`}>
+                Restaurant Charleroi
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+          <div className="hidden md:flex items-center space-x-1">
+            {navLinks.map((link) => (
               <Link
-                key={item.path}
-                to={item.path}
-                className={`relative font-medium transition-colors duration-300 ${
-                  isActive(item.path)
-                    ? 'text-amber-600'
-                    : 'text-stone-700 hover:text-amber-600'
+                key={link.name}
+                href={link.href}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 relative group ${
+                  isActive(link.href)
+                    ? (isScrolled ? 'text-amber-600 bg-amber-50' : 'text-white bg-white/20')
+                    : (isScrolled ? 'text-stone-600 hover:text-amber-600 hover:bg-stone-50' : 'text-white/90 hover:text-white hover:bg-white/10')
                 }`}
               >
-                {item.name}
-                {isActive(item.path) && (
+                {link.name}
+                {isActive(link.href) && (
                   <motion.div
-                    layoutId="activeTab"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-amber-600 rounded-full"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    layoutId="nav-underline"
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${
+                      isScrolled ? 'bg-amber-600' : 'bg-white'
+                    }`}
                   />
                 )}
               </Link>
             ))}
-          </div>
-
-          {/* Contact Info & CTA */}
-          <div className="hidden md:flex items-center space-x-4">
-            <div className="flex items-center space-x-1 text-stone-600 text-sm">
-              <Phone size={16} />
-              <span>071 59 64 48</span>
-            </div>
             <Link
-              to="/reservation"
-              className="bg-amber-600 text-white px-6 py-2 rounded-full font-medium hover:bg-amber-700 transition-colors duration-300 shadow-lg hover:shadow-xl"
+              href="/reservation"
+              className={`ml-4 px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg ${
+                isScrolled
+                  ? 'bg-amber-600 text-white hover:bg-amber-700'
+                  : 'bg-white text-stone-900 hover:bg-amber-50'
+              }`}
             >
               Réserver
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-md text-stone-700 hover:text-amber-600 hover:bg-stone-100 transition-colors duration-300"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`p-2 rounded-lg transition-colors duration-300 ${
+                isScrolled || isOpen ? 'text-stone-900 hover:bg-stone-100' : 'text-white hover:bg-white/10'
+              }`}
+              aria-label="Menu principal"
+            >
+              {isOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Navigation */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white border-t border-stone-200 overflow-hidden"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="md:hidden bg-white border-t border-stone-100 overflow-hidden shadow-2xl"
           >
-            <div className="px-4 py-6 space-y-4">
-              {navItems.map((item) => (
+            <div className="px-4 pt-4 pb-8 space-y-2">
+              {navLinks.map((link) => (
                 <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`block font-medium transition-colors duration-300 ${
-                    isActive(item.path)
-                      ? 'text-amber-600'
-                      : 'text-stone-700 hover:text-amber-600'
+                  key={link.name}
+                  href={link.href}
+                  className={`flex items-center justify-between px-4 py-4 rounded-xl text-lg font-medium transition-all ${
+                    isActive(link.href)
+                      ? 'bg-amber-50 text-amber-600'
+                      : 'text-stone-600 hover:bg-stone-50'
                   }`}
                 >
-                  {item.name}
+                  {link.name}
+                  {isActive(link.href) && (
+                    <div className="w-2 h-2 rounded-full bg-amber-600" />
+                  )}
                 </Link>
               ))}
-              <div className="pt-4 border-t border-stone-200">
-                <div className="flex items-center space-x-2 text-stone-600 text-sm mb-4">
-                  <Phone size={16} />
-                  <span>071 59 64 48</span>
-                </div>
+              
+              <div className="pt-6 grid grid-cols-1 gap-4">
                 <Link
-                  to="/reservation"
-                  onClick={() => setIsOpen(false)}
-                  className="block bg-amber-600 text-white px-6 py-3 rounded-full font-medium text-center hover:bg-amber-700 transition-colors duration-300"
+                  href="/reservation"
+                  className="bg-amber-600 text-white text-center py-4 rounded-xl font-bold text-lg shadow-lg active:scale-95 transition-transform"
                 >
                   Réserver une table
                 </Link>
+              </div>
+
+              {/* Mobile Quick Contacts */}
+              <div className="mt-8 pt-8 border-t border-stone-100 grid grid-cols-1 gap-6">
+                <div className="flex items-center space-x-4 text-stone-500">
+                  <div className="p-2 bg-stone-100 rounded-lg">
+                    <Phone size={20} />
+                  </div>
+                  <span className="font-medium">071 59 64 48</span>
+                </div>
+                <div className="flex items-center space-x-4 text-stone-500">
+                  <div className="p-2 bg-stone-100 rounded-lg">
+                    <MapPin size={20} />
+                  </div>
+                  <span className="font-medium text-sm">Rue de Dampremy 22, 6000 Charleroi</span>
+                </div>
               </div>
             </div>
           </motion.div>

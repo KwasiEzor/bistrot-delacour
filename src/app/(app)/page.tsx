@@ -1,7 +1,9 @@
+'use client'
+
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Star, Clock, Users, ArrowRight, ChefHat } from 'lucide-react'
-import TestimonialsCarousel from '../components/TestimonialsCarousel'
+import TestimonialsCarousel from '@/components/TestimonialsCarousel'
 
 const Home = () => {
   return (
@@ -45,14 +47,14 @@ const Home = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Link
-              to="/reservation"
+              href="/reservation"
               className="bg-amber-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-amber-700 transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 flex items-center space-x-2"
             >
               <span>Réserver une table</span>
               <ArrowRight size={20} />
             </Link>
             <Link
-              to="/menu"
+              href="/menu"
               className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-stone-900 transition-all duration-300 flex items-center space-x-2"
             >
               <ChefHat size={20} />
@@ -173,7 +175,7 @@ const Home = () => {
             className="text-center mt-12"
           >
             <Link
-              to="/menu"
+              href="/menu"
               className="inline-flex items-center space-x-2 bg-stone-900 text-white px-8 py-3 rounded-full font-semibold hover:bg-stone-800 transition-colors duration-300"
             >
               <span>Voir tout le menu</span>
@@ -219,7 +221,7 @@ const Home = () => {
             className="text-center mt-12"
           >
             <Link
-              to="/reviews"
+              href="/reviews"
               className="inline-flex items-center space-x-2 bg-stone-900 text-white px-8 py-3 rounded-full font-semibold hover:bg-stone-800 transition-all duration-300 hover:scale-105"
             >
               <span>Lire tous les avis</span>

@@ -1,8 +1,12 @@
-import { buildConfig } from 'payload/config';
+import { buildConfig } from '@payloadcms/next/config';
 import path from 'path';
 import { mongooseAdapter } from '@payloadcms/db-mongodb';
-import { slateEditor } from '@payloadcms/richtext-slate';
-import { viteBundler } from '@payloadcms/bundler-vite';
+import { lexicalEditor } from '@payloadcms/richtext-lexical';
+import { webpackBundler } from '@payloadcms/bundler-webpack';
+import { fileURLToPath } from 'url';
+
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 import MenuItems from './collections/MenuItems';
 import MenuCategories from './collections/MenuCategories';
@@ -20,9 +24,9 @@ import SEOSettings from './globals/SEOSettings';
 
 export default buildConfig({
   admin: {
-    bundler: viteBundler(),
+    bundler: webpackBundler(),
   },
-  editor: slateEditor({}),
+  editor: lexicalEditor({}),
   collections: [
     MenuItems,
     MenuCategories,
@@ -40,10 +44,10 @@ export default buildConfig({
     SEOSettings,
   ],
   typescript: {
-    outputFile: path.resolve(__dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   graphQL: {
-    schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
+    schemaOutputFile: path.resolve(dirname, 'generated-schema.graphql'),
   },
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',

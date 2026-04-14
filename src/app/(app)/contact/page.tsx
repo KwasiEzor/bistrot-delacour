@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Clock, Mail, Send } from 'lucide-react'
@@ -6,9 +8,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import Link from 'next/link'
 
-import { contactSchema, type ContactFormData } from '../lib/schemas'
-import { createContactMessage } from '../api/services'
+import { contactSchema, type ContactFormData } from '@/lib/schemas'
+import { createContactMessage } from '@/api/services'
 
 // Fix for default marker icon in Leaflet + Vite/React
 import markerIcon from 'leaflet/dist/images/marker-icon.png'
@@ -16,9 +19,9 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
 import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 
 const DefaultIcon = L.icon({
-  iconUrl: markerIcon,
-  iconRetinaUrl: markerIcon2x,
-  shadowUrl: markerShadow,
+  iconUrl: (markerIcon as any).src || markerIcon,
+  iconRetinaUrl: (markerIcon2x as any).src || markerIcon2x,
+  shadowUrl: (markerShadow as any).src || markerShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -233,7 +236,7 @@ const Contact = () => {
                         className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
                       />
                       {errors.email && (
-                        <p id="email-error" className="mt-1 text-sm text-red-600" role="alert">
+                        <p id="contact-email-error" className="mt-1 text-sm text-red-600" role="alert">
                           {errors.email.message}
                         </p>
                       )}
@@ -295,9 +298,9 @@ const Contact = () => {
                     />
                     <label htmlFor="acceptPrivacy" className="text-sm text-stone-600">
                       J'accepte que mes données soient traitées conformément à la{' '}
-                      <a href="/privacy" className="text-amber-600 hover:underline">
+                      <Link href="/privacy" className="text-amber-600 hover:underline">
                         politique de confidentialité
-                      </a>
+                      </Link>
                       . *
                     </label>
                   </div>
@@ -409,7 +412,7 @@ const Contact = () => {
               },
               {
                 question: "Proposez-vous des menus pour enfants ?",
-                answer: "Oui, nous avons un menu enfant adapté avec des portions raisonnables et des plats simples que les enfants aiment."
+                answer: "Oui, nous avons un menu enfant adapté with des portions raisonnables et des plats simples que les enfants aiment."
               },
               {
                 question: "Y a-t-il une tenue vestimentaire exigée ?",

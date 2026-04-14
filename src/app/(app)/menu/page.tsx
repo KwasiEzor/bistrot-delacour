@@ -1,9 +1,11 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ChefHat, Leaf, Wheat, Fish } from 'lucide-react'
-import { getMenuCategories, getSpecialMenuItems, getMenuItems } from '../api/services'
-import { getStrapiImageUrl } from '../api/client'
-import type { MenuCategory, MenuItem } from '../types/strapi'
+import { getMenuCategories, getSpecialMenuItems, getMenuItems } from '@/api/services'
+import { getStrapiImageUrl } from '@/api/client'
+import type { MenuCategory, MenuItem } from '@/types/strapi'
 
 const iconMap: Record<string, React.ElementType> = {
   Leaf,
@@ -101,7 +103,7 @@ const Menu = () => {
               Notre Menu
             </h1>
             <p className="text-xl text-stone-600 max-w-3xl mx-auto leading-relaxed">
-              Une cuisine simple et excellente, préparée avec des ingrédients frais
+              Une cuisine simple et excellente, préparée with des ingrédients frais
               et de saison. Chaque plat est une invitation au voyage culinaire.
             </p>
           </motion.div>
