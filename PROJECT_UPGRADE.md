@@ -38,7 +38,7 @@ This document outlines the strategic transition of the Bistrot De La Cour projec
 
 ### Milestone 4: Payload CMS Migration (In Progress)
 *   [X] Purge Strapi backend and related configurations.
-*   [ ] Define TypeScript schemas for Menu, Gallery, and Reviews (Started: MenuItems defined).
+*   [X] Define TypeScript schemas for Menu, Gallery, Reviews, and more.
 *   [ ] Set up Payload CMS instance.
 *   [ ] Implement new data fetching logic for Payload.
 
