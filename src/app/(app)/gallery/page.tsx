@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { getGalleryImages } from '@/api/services'
-import { getStrapiImageUrl } from '@/api/client'
-import type { GalleryImage } from '@/types/strapi'
+import { getPayloadImageUrl } from '@/api/client'
+import type { GalleryImage } from '@/types/payload'
+import Link from 'next/link'
 
 const categoryMap: Record<string, string> = {
   interior: 'Ambiance',
@@ -27,7 +28,7 @@ const Gallery = () => {
     const fetchImages = async () => {
       try {
         const res = await getGalleryImages()
-        setImages(res.data)
+        setImages(res.docs)
       } catch (err) {
         console.error('Failed to load gallery:', err)
       } finally {
@@ -115,7 +116,7 @@ const Gallery = () => {
           <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence>
               {filteredImages.map((image, index) => {
-                const imageUrl = getStrapiImageUrl(image.image, 'medium')
+                const imageUrl = getPayloadImageUrl(image.image, 'medium')
                 if (!imageUrl) return null
                 return (
                   <motion.div
@@ -203,7 +204,7 @@ const Gallery = () => {
               </button>
 
               <img
-                src={getStrapiImageUrl(filteredImages[selectedImage].image, 'large') || ''}
+                src={getPayloadImageUrl(filteredImages[selectedImage].image, 'large') || ''}
                 alt={filteredImages[selectedImage].title}
                 className="max-w-full max-h-[80vh] object-contain rounded-lg"
               />

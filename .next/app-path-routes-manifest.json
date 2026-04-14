@@ -1,0 +1,14 @@
+{
+  "/(app)/about/page": "/about",
+  "/(app)/contact/page": "/contact",
+  "/(app)/gallery/page": "/gallery",
+  "/(app)/menu/page": "/menu",
+  "/(app)/page": "/",
+  "/(app)/privacy/page": "/privacy",
+  "/(app)/reservation/page": "/reservation",
+  "/(app)/reviews/page": "/reviews",
+  "/(payload)/admin/[[...segments]]/page": "/admin/[[...segments]]",
+  "/(payload)/api/[...slug]/route": "/api/[...slug]",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found"
+}

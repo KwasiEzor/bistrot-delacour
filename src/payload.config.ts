@@ -1,8 +1,7 @@
-import { buildConfig } from '@payloadcms/next/config';
+import { buildConfig } from 'payload';
 import path from 'path';
 import { mongooseAdapter } from '@payloadcms/db-mongodb';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
-import { webpackBundler } from '@payloadcms/bundler-webpack';
 import { fileURLToPath } from 'url';
 
 const filename = fileURLToPath(import.meta.url);
@@ -24,9 +23,12 @@ import SEOSettings from './globals/SEOSettings';
 
 export default buildConfig({
   admin: {
-    bundler: webpackBundler(),
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
   },
   editor: lexicalEditor({}),
+  secret: process.env.PAYLOAD_SECRET || '',
   collections: [
     MenuItems,
     MenuCategories,

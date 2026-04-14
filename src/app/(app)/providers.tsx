@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { persistQueryClient } from '@tanstack/react-query-persist-client'
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import CookieConsent from '@/components/CookieConsent'
 import { useCookieConsent } from '@/hooks/useCookieConsent'
 

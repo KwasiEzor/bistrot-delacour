@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ChefHat, Leaf, Wheat, Fish } from 'lucide-react'
 import { getMenuCategories, getSpecialMenuItems, getMenuItems } from '@/api/services'
-import { getStrapiImageUrl } from '@/api/client'
-import type { MenuCategory, MenuItem } from '@/types/strapi'
+import { getPayloadImageUrl } from '@/api/client'
+import type { MenuCategory, MenuItem } from '@/types/payload'
 
 const iconMap: Record<string, React.ElementType> = {
   Leaf,
@@ -31,16 +31,16 @@ const Menu = () => {
           getSpecialMenuItems(),
         ])
 
-        const cats = categoriesRes.data
+        const cats = categoriesRes.docs
         setCategories(cats)
-        setSpecialItems(specialsRes.data)
+        setSpecialItems(specialsRes.docs)
 
         // Fetch items for each category
         const itemsMap: Record<string, MenuItem[]> = {}
         await Promise.all(
           cats.map(async (cat) => {
             const itemsRes = await getMenuItems(cat.slug)
-            itemsMap[cat.slug] = itemsRes.data
+            itemsMap[cat.slug] = itemsRes.docs
           })
         )
         setMenuItemsByCategory(itemsMap)
@@ -157,7 +157,7 @@ const Menu = () => {
                   {item.image && (
                     <div className="w-full md:w-32 lg:w-40 h-32 md:h-24 lg:h-32 rounded-lg overflow-hidden mb-4 md:mb-0 md:mr-6 flex-shrink-0 shadow-lg">
                       <img
-                        src={getStrapiImageUrl(item.image, 'medium') || '/images/placeholder.jpg'}
+                        src={getPayloadImageUrl(item.image, 'medium') || '/images/placeholder.jpg'}
                         alt={item.name}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         loading="lazy"
@@ -171,9 +171,9 @@ const Menu = () => {
                     <p className="text-stone-600 mb-3 leading-relaxed">
                       {item.description}
                     </p>
-                    {item.allergens && item.allergens.length > 0 && (
+                    {item.allergens && (
                       <div className="flex flex-wrap gap-2">
-                        {item.allergens.map((allergen: string) => (
+                        {(Array.isArray(item.allergens) ? item.allergens : []).map((allergen: string) => (
                           <span
                             key={allergen}
                             className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full"

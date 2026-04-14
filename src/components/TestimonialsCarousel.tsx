@@ -1,8 +1,10 @@
+'use client'
+
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
-import { getTestimonials } from '../api/services'
+import { getTestimonials } from '@/api/services'
 
 const TestimonialsCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -13,7 +15,7 @@ const TestimonialsCarousel = () => {
     queryFn: () => getTestimonials(true),
   })
 
-  const testimonials = testimonialsData?.data || []
+  const testimonials = testimonialsData?.docs || []
 
   const nextSlide = useCallback(() => {
     if (testimonials.length === 0) return
@@ -120,7 +122,7 @@ const TestimonialsCarousel = () => {
                     {current.author}
                   </p>
                   <p className="text-stone-500 text-sm">
-                    {current.date || new Date(current.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {new Date(current.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                 </div>
               </motion.div>

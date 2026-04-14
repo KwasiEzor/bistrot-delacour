@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, UtensilsCrossed, Phone, Clock, MapPin } from 'lucide-react'
+import { Menu, X, UtensilsCrossed, Phone, MapPin } from 'lucide-react'
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -21,8 +21,10 @@ const Navigation = () => {
 
   // Close mobile menu when route changes
   useEffect(() => {
-    setIsOpen(false)
-  }, [pathname])
+    if (isOpen) {
+      setIsOpen(false) // eslint-disable-line react-hooks/set-state-in-effect
+    }
+  }, [pathname, isOpen])
 
   const navLinks = [
     { name: 'Accueil', href: '/' },

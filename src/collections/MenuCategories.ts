@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload/types';
+import { CollectionConfig } from 'payload';
 
 const MenuCategories: CollectionConfig = {
   slug: 'menu-categories',
@@ -18,7 +18,7 @@ const MenuCategories: CollectionConfig = {
     },
     {
       name: 'slug',
-      type: 'slug',
+      type: 'text',
       required: true,
       unique: true,
     },

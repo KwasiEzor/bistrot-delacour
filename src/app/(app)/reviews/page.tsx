@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Star, Quote } from 'lucide-react'
 import { getReviews } from '@/api/services'
-import type { Review } from '@/types/strapi'
+import type { Review } from '@/types/payload'
 import Link from 'next/link'
 
 const Reviews = () => {
@@ -15,7 +15,7 @@ const Reviews = () => {
     const fetchReviews = async () => {
       try {
         const res = await getReviews(50)
-        setReviews(res.data)
+        setReviews(res.docs)
       } catch (err) {
         console.error('Failed to load reviews:', err)
       } finally {

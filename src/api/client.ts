@@ -1,16 +1,40 @@
 /**
- * Placeholder client for Payload CMS migration.
+ * Payload CMS API Client
  */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getStrapiImageUrl = (image: any, _size?: string) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+export const getPayloadImageUrl = (image: unknown, size?: 'thumbnail' | 'medium' | 'large') => {
   if (!image) return null;
-  // This is a placeholder to prevent frontend crashes during migration
-  return typeof image === 'string' ? image : (image.url || null);
+  
+  // If image is just a string (ID), we can't get the URL easily without fetching
+  if (typeof image === 'string') return null;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const img = image as any;
+
+  // If it's the full media object from Payload
+  if (size && img.sizes && img.sizes[size]) {
+    return img.sizes[size].url || img.url;
+  }
+
+  return img.url || null;
 };
 
-export const fetchAPI = async (path: string, _options = {}) => { // eslint-disable-line @typescript-eslint/no-unused-vars
-  const url = `${import.meta.env.VITE_API_URL}${path}`;
-  const response = await fetch(url);
+export const fetchAPI = async (path: string, options: RequestInit = {}) => {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+  const url = `${baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
+  
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ...((options as any).headers || {}),
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.statusText}`);
+  }
+
   return response.json();
 };

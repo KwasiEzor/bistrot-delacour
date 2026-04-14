@@ -51,7 +51,7 @@ class ErrorBoundary extends Component<Props, State> {
                 Rafraîchir
               </button>
               <Link
-                to="/"
+                href="/"
                 className="px-6 py-3 border border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 transition-colors"
               >
                 Accueil

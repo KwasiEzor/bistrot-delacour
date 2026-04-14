@@ -1,0 +1,14 @@
+{
+  "/(app)/about/page": "app/(app)/about/page.js",
+  "/(app)/contact/page": "app/(app)/contact/page.js",
+  "/(app)/gallery/page": "app/(app)/gallery/page.js",
+  "/(app)/menu/page": "app/(app)/menu/page.js",
+  "/(app)/page": "app/(app)/page.js",
+  "/(app)/privacy/page": "app/(app)/privacy/page.js",
+  "/(app)/reservation/page": "app/(app)/reservation/page.js",
+  "/(app)/reviews/page": "app/(app)/reviews/page.js",
+  "/(payload)/admin/[[...segments]]/page": "app/(payload)/admin/[[...segments]]/page.js",
+  "/(payload)/api/[...slug]/route": "app/(payload)/api/[...slug]/route.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js"
+}

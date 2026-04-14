@@ -1,34 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Clock, Mail, Send } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
-import L from 'leaflet'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
 import { contactSchema, type ContactFormData } from '@/lib/schemas'
 import { createContactMessage } from '@/api/services'
 
-// Fix for default marker icon in Leaflet + Vite/React
-import markerIcon from 'leaflet/dist/images/marker-icon.png'
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
-import markerShadow from 'leaflet/dist/images/marker-shadow.png'
+// Dynamically import Map components to avoid SSR errors
+const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false })
+const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false })
+const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), { ssr: false })
+const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), { ssr: false })
 
-const DefaultIcon = L.icon({
-  iconUrl: (markerIcon as any).src || markerIcon,
-  iconRetinaUrl: (markerIcon2x as any).src || markerIcon2x,
-  shadowUrl: (markerShadow as any).src || markerShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-})
-
-L.Marker.prototype.options.icon = DefaultIcon
+import 'leaflet/dist/leaflet.css'
 
 const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -51,6 +40,26 @@ const Contact = () => {
       acceptPrivacy: false,
     },
   })
+
+  // Fix for default marker icon in Leaflet + Next.js
+  useMemo(() => {
+    if (typeof window === 'undefined') return
+    
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const L = require('leaflet')
+    
+    // Fix icons
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (L.Icon.Default.prototype as any)._getIconUrl
+    L.Icon.Default.mergeOptions({
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      iconUrl: require('leaflet/dist/images/marker-icon.png').default,
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      shadowUrl: require('leaflet/dist/images/marker-shadow.png').default,
+    })
+  }, [])
 
   const onSubmit = async (data: ContactFormData) => {
     setSubmitError(null)
@@ -232,7 +241,7 @@ const Contact = () => {
                         id="contact-email"
                         {...register('email')}
                         aria-invalid={!!errors.email}
-                        aria-describedby={errors.email ? 'email-error' : undefined}
+                        aria-describedby={errors.email ? 'contact-email-error' : undefined}
                         className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
                       />
                       {errors.email && (
@@ -351,25 +360,27 @@ const Contact = () => {
       <section className="pb-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="h-[500px] w-full relative z-0 rounded-2xl overflow-hidden shadow-lg border border-stone-200">
-            <MapContainer
-              center={position}
-              zoom={16}
-              scrollWheelZoom={false}
-              className="h-full w-full"
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={position}>
-                <Popup>
-                  <div className="text-center">
-                    <h4 className="font-bold text-stone-900">Bistrot De La Cour</h4>
-                    <p className="text-sm text-stone-600">Rue de Dampremy 22, 6000 Charleroi</p>
-                  </div>
-                </Popup>
-              </Marker>
-            </MapContainer>
+            {typeof window !== 'undefined' && (
+              <MapContainer
+                center={position}
+                zoom={16}
+                scrollWheelZoom={false}
+                className="h-full w-full"
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker position={position}>
+                  <Popup>
+                    <div className="text-center">
+                      <h4 className="font-bold text-stone-900">Bistrot De La Cour</h4>
+                      <p className="text-sm text-stone-600">Rue de Dampremy 22, 6000 Charleroi</p>
+                    </div>
+                  </Popup>
+                </Marker>
+              </MapContainer>
+            )}
           </div>
         </div>
       </section>
