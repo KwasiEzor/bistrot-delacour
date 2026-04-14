@@ -1,28 +1,19 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
 import { getTestimonials } from '../api/services'
-import type { Testimonial } from '../types/strapi'
 
 const TestimonialsCarousel = () => {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const res = await getTestimonials(true)
-        setTestimonials(res.data)
-      } catch (err) {
-        console.error('Failed to load testimonials:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchTestimonials()
-  }, [])
+  const { data: testimonialsData, isLoading } = useQuery({
+    queryKey: ['testimonials'],
+    queryFn: () => getTestimonials(true),
+  })
+
+  const testimonials = testimonialsData?.data || []
 
   const nextSlide = useCallback(() => {
     if (testimonials.length === 0) return
@@ -46,7 +37,7 @@ const TestimonialsCarousel = () => {
     return () => clearInterval(interval)
   }, [nextSlide, isAutoPlaying, testimonials.length])
 
-  if (loading || testimonials.length === 0) {
+  if (isLoading || testimonials.length === 0) {
     return (
       <div className="flex justify-center py-12" data-testid="loading-spinner">
         <div className="w-12 h-12 border-4 border-amber-600 border-t-transparent rounded-full animate-spin" />

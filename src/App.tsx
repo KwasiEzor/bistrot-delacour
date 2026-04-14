@@ -1,11 +1,32 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+import { persistQueryClient } from '@tanstack/react-query-persist-client'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import CookieConsent from './components/CookieConsent'
 import { useCookieConsent } from './hooks/useCookieConsent'
 import ErrorBoundary from './components/ErrorBoundary'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    },
+  },
+})
+
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+})
+
+persistQueryClient({
+  queryClient,
+  persister,
+})
 
 // Code-split all page components
 const Home = lazy(() => import('./pages/Home'))
@@ -45,33 +66,35 @@ function CookieConsentWrapper() {
 function App() {
   return (
     <ErrorBoundary>
-      <Router>
-        <div className="min-h-screen bg-stone-50 text-stone-900">
-          <Navigation />
-          <motion.main
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/menu" element={<Menu />} />
-                <Route path="/reservation" element={<Reservation />} />
-                <Route path="/gallery" element={<Gallery />} />
-                <Route path="/reviews" element={<Reviews />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-              </Routes>
-            </Suspense>
-          </motion.main>
-          <Footer />
-          <AnimatePresence>
-            <CookieConsentWrapper />
-          </AnimatePresence>
-        </div>
-      </Router>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <div className="min-h-screen bg-stone-50 text-stone-900">
+            <Navigation />
+            <motion.main
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Suspense fallback={<LoadingFallback />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/menu" element={<Menu />} />
+                  <Route path="/reservation" element={<Reservation />} />
+                  <Route path="/gallery" element={<Gallery />} />
+                  <Route path="/reviews" element={<Reviews />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                </Routes>
+              </Suspense>
+            </motion.main>
+            <Footer />
+            <AnimatePresence>
+              <CookieConsentWrapper />
+            </AnimatePresence>
+          </div>
+        </Router>
+      </QueryClientProvider>
     </ErrorBoundary>
   )
 }
