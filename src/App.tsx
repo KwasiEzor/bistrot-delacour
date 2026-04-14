@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
-import CookieConsent, { useCookieConsent } from './components/CookieConsent'
+import CookieConsent from './components/CookieConsent'
+import { useCookieConsent } from './hooks/useCookieConsent'
 import ErrorBoundary from './components/ErrorBoundary'
 
 // Code-split all page components
