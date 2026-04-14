@@ -21,22 +21,23 @@ This document outlines the strategic transition of the Bistrot De La Cour projec
 
 ## 4. Implementation Phases (Milestones)
 
-### Milestone 1: Stability & Hardening (Current)
-*   [ ] Fix all 28 existing linting errors.
-*   [ ] Resolve `any` types in frontend components.
-*   [ ] Standardize error boundaries.
+### Milestone 1: Stability & Hardening
+*   [X] Fix all 28 existing linting errors.
+*   [X] Resolve `any` types in frontend components.
+*   [X] Set up Vitest and React Testing Library for TDD.
 
 ### Milestone 2: PWA Integration
-*   [ ] Install and configure `vite-plugin-pwa`.
-*   [ ] Create Web Manifest and icons.
-*   [ ] Verify "Add to Home Screen" functionality.
+*   [X] Install and configure `vite-plugin-pwa`.
+*   [X] Create Web Manifest and icons.
+*   [X] Register service worker in `main.tsx`.
 
 ### Milestone 3: Data Layer Upgrade
-*   [ ] Integrate TanStack Query.
-*   [ ] Implement persistent caching for offline menu access.
+*   [X] Integrate TanStack Query.
+*   [X] Implement persistent caching for offline menu access.
+*   [X] Refactor TestimonialsCarousel as a proof-of-concept.
 
-### Milestone 4: Payload CMS Migration
-*   [ ] Define TypeScript schemas for Menu, Gallery, and Reviews.
+### Milestone 4: Payload CMS Migration (In Progress)
+*   [ ] Define TypeScript schemas for Menu, Gallery, and Reviews (Started: MenuItems defined).
 *   [ ] Set up Payload CMS instance.
 *   [ ] Migrate data fetching logic from Strapi services.
 
