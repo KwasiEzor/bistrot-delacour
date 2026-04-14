@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
@@ -6,9 +7,18 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(async () => {
   const plugins = [react(), tailwindcss()];
   try {
-    // @ts-ignore
+    // @ts-expect-error - File might not exist
     const m = await import('./.vite-source-tags.js');
     plugins.push(m.sourceTags());
-  } catch {}
-  return { plugins };
+  } catch {
+    // Ignore error if file doesn't exist
+  }
+  return { 
+    plugins,
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/test/setup.ts',
+    }
+  };
 })

@@ -1,4 +1,4 @@
-export default ({ env }: { env: (key: string, defaultVal?: any) => any }) => ({
+export default ({ env }: { env: (key: string, defaultVal?: unknown) => string }) => ({
   connection: {
     client: env('DATABASE_CLIENT', 'sqlite'),
     connection: {

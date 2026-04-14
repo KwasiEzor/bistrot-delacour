@@ -1,7 +1,7 @@
 export default {
   register(/*{ strapi }*/) {},
 
-  async bootstrap({ strapi }) {
+  async bootstrap({ strapi }: { strapi: any }) { // eslint-disable-line @typescript-eslint/no-explicit-any
     // ─── Set public API permissions ───
     const publicRoles = await strapi.db
       .query('plugin::users-permissions.role')
@@ -12,7 +12,7 @@ export default {
       const existingPerms = await strapi.db
         .query('plugin::users-permissions.permission')
         .findMany({ where: { role: { id: publicRoleId } } });
-      const existingActions = new Set(existingPerms.map((p: any) => p.action));
+      const existingActions = new Set(existingPerms.map((p: { action: string }) => p.action));
 
       const publicActions = [
         'api::menu-category.menu-category.find',
@@ -70,7 +70,7 @@ export default {
       ];
 
       strapi.log.info('  🍽️  Menu Categories');
-      const catMap: Record<string, any> = {};
+      const catMap: Record<string, { documentId: string }> = {};
       for (const cat of categories) {
         const created = await strapi.documents('api::menu-category.menu-category').create({ data: cat });
         catMap[cat.slug] = created;
@@ -102,9 +102,9 @@ export default {
 
       strapi.log.info('  🍴 Menu Items');
       for (const item of items) {
-        const { cs, ...rest } = item;
-        const data: any = { ...rest, isAvailable: true };
-        if (catMap[cs]) data.category = catMap[cs].documentId;
+        const { cs: _cs, ...rest } = item; // eslint-disable-line @typescript-eslint/no-unused-vars
+        const data: Record<string, unknown> = { ...rest, isAvailable: true };
+        if (catMap[item.cs]) data.category = catMap[item.cs].documentId;
         await strapi.documents('api::menu-item.menu-item').create({ data });
         strapi.log.info(`    ✓ ${item.name}`);
       }
@@ -201,9 +201,9 @@ export default {
           const result = await strapi.db.connection.raw(
             `UPDATE ${table} SET is_published = 1, published_at = COALESCE(published_at, created_at) WHERE is_published = 0 OR is_published IS NULL`
           );
-          const changes = result?.changes || result?.[0]?.changes || 0;
+          const changes = (result as { changes?: number } | { [key: number]: { changes?: number } })?.changes || (result as any)?.[0]?.changes || 0; // eslint-disable-line @typescript-eslint/no-explicit-any
           if (changes > 0) strapi.log.info(`    ✓ ${table}: ${changes} published`);
-        } catch (e: any) {
+        } catch (_unused: unknown) { // eslint-disable-line @typescript-eslint/no-unused-vars
           // Table might not have is_published column — that's ok
         }
       }
@@ -214,8 +214,9 @@ export default {
       });
 
       strapi.log.info('✅ Database seeded!');
-    } catch (error: any) {
-      strapi.log.error(`❌ Seed failed: ${error.message}`);
+    } catch (error: unknown) {
+      const err = error as Error;
+      strapi.log.error(`❌ Seed failed: ${err.message}`);
       console.error(error);
     }
   },

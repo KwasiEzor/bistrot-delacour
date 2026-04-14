@@ -1,44 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Cookie, Settings, Check } from 'lucide-react'
-
-const COOKIE_CONSENT_KEY = 'bistrot-cookie-consent'
-
-interface CookiePreferences {
-  necessary: boolean
-  analytics: boolean
-  marketing: boolean
-}
-
-export function useCookieConsent() {
-  const [consent, setConsent] = useState<CookiePreferences | null>(null)
-
-  useEffect(() => {
-    const stored = localStorage.getItem(COOKIE_CONSENT_KEY)
-    if (stored) {
-      setConsent(JSON.parse(stored))
-    }
-  }, [])
-
-  const acceptAll = () => {
-    const prefs: CookiePreferences = { necessary: true, analytics: true, marketing: true }
-    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(prefs))
-    setConsent(prefs)
-  }
-
-  const acceptNecessary = () => {
-    const prefs: CookiePreferences = { necessary: true, analytics: false, marketing: false }
-    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(prefs))
-    setConsent(prefs)
-  }
-
-  const savePreferences = (prefs: CookiePreferences) => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(prefs))
-    setConsent(prefs)
-  }
-
-  return { consent, acceptAll, acceptNecessary, savePreferences, hasConsented: consent !== null }
-}
+import type { CookiePreferences } from '../hooks/useCookieConsent'
 
 interface CookieConsentBannerProps {
   onAcceptAll: () => void

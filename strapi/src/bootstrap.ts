@@ -145,8 +145,8 @@ export async function bootstrap({ strapi }) {
     strapi.log.info('  🍴 Menu Items...');
     for (const item of SEED_DATA.menuItems) {
       const category = catMap[item.categorySlug];
-      const { categorySlug, ...rest } = item;
-      const data: any = { ...rest, isAvailable: true };
+      const { categorySlug: _unused, ...rest } = item; // eslint-disable-line @typescript-eslint/no-unused-vars
+      const data: Record<string, unknown> = { ...rest, isAvailable: true };
       if (category) data.category = category.documentId;
       await strapi.documents('api::menu-item.menu-item').create({ data });
       strapi.log.info(`    ✓ ${item.name}`);

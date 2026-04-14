@@ -1,4 +1,4 @@
-export default ({ env }: { env: (key: string, defaultVal?: any) => any }) => ({
+export default () => ({
   rest: {
     pagination: {
       maxPageSize: 100,

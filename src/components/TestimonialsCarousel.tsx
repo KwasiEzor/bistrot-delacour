@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
 import { getTestimonials } from '../api/services'
@@ -24,19 +24,19 @@ const TestimonialsCarousel = () => {
     fetchTestimonials()
   }, [])
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     if (testimonials.length === 0) return
     setCurrentIndex((prevIndex) =>
       prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
     )
-  }
+  }, [testimonials.length])
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     if (testimonials.length === 0) return
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
     )
-  }
+  }, [testimonials.length])
 
   const goToSlide = (index: number) => setCurrentIndex(index)
 
@@ -44,11 +44,11 @@ const TestimonialsCarousel = () => {
     if (!isAutoPlaying || testimonials.length === 0) return
     const interval = setInterval(nextSlide, 5000)
     return () => clearInterval(interval)
-  }, [currentIndex, isAutoPlaying, testimonials.length])
+  }, [nextSlide, isAutoPlaying, testimonials.length])
 
   if (loading || testimonials.length === 0) {
     return (
-      <div className="flex justify-center py-12">
+      <div className="flex justify-center py-12" data-testid="loading-spinner">
         <div className="w-12 h-12 border-4 border-amber-600 border-t-transparent rounded-full animate-spin" />
       </div>
     )
